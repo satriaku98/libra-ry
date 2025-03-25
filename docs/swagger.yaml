@@ -1,0 +1,135 @@
+definitions:
+  domain.Buku:
+    properties:
+      id_buku:
+        type: integer
+      judul:
+        type: string
+      penerbit:
+        type: string
+      penulis:
+        type: string
+      stok:
+        type: integer
+      tahun_terbit:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /buku:
+    get:
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: Search by book title
+        in: query
+        name: judul
+        type: string
+      - description: Search by author
+        in: query
+        name: penulis
+        type: string
+      - description: Search by publisher
+        in: query
+        name: penerbit
+        type: string
+      - description: Search by year published
+        in: query
+        name: tahun_terbit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Buku'
+            type: array
+      summary: Get paginated books
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Book Data
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Buku'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Book created
+          schema:
+            type: string
+      summary: Create a new book
+      tags:
+      - books
+  /buku/{id}:
+    delete:
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Book deleted
+          schema:
+            type: string
+      summary: Delete a book
+      tags:
+      - books
+    get:
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Buku'
+      summary: Get a book by ID
+      tags:
+      - books
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated Book Data
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Buku'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Book updated
+          schema:
+            type: string
+      summary: Update book details
+      tags:
+      - books
+swagger: "2.0"
