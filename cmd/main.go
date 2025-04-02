@@ -2,11 +2,8 @@ package main
 
 import (
 	"libra-ry/config"
-	authorization "libra-ry/internal/auth"
-	"libra-ry/internal/handler"
 	"libra-ry/internal/middleware"
-	"libra-ry/internal/repository"
-	"libra-ry/internal/usecase"
+	"libra-ry/routes"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -29,25 +26,12 @@ func main() {
 	app.Use(middleware.CORSMiddleware())
 	app.Use(config.NewSwaggerConfig())
 
-	// Initialize repository, use case, and handler for Buku
-	repo := repository.NewBukuRepository(db)
-	useCase := usecase.NewBukuUseCase(repo)
-	handler := handler.NewBukuHandler(useCase)
+	// Initialize Dependencies
+	deps := config.InitDependencies(db, logger)
 
-	// Route untuk Swagger UI
-	// Group buku dengan middleware JWT
-	buku := app.Group("/buku", middleware.JWTMiddleware())
-	// GET hanya bisa diakses oleh user dengan izin "buku_read"
-	buku.Get("/", middleware.CheckPermission("buku_read"), handler.GetBuku)
-	// POST, PUT, DELETE hanya bisa diakses oleh user dengan izin "buku_write"
-	buku.Post("/", middleware.CheckPermission("buku_write"), handler.CreateBuku)
-	buku.Put("/:id", middleware.CheckPermission("buku_write"), handler.UpdateBuku)
-	buku.Delete("/:id", middleware.CheckPermission("buku_write"), handler.DeleteBuku)
-
-	// Route untuk Swagger UI
-	// Group auth tanpa middleware JWT
-	auth := app.Group("/auth")
-	auth.Post("/login", authorization.Login)
+	// Register Routes
+	routes.BukuRoutes(app, deps.BukuHandler)
+	routes.AuthRoutes(app)
 
 	port := config.GetEnv("APP_PORT", "3000")
 	logger.Info("Server is running on port " + port)

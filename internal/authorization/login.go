@@ -2,6 +2,8 @@ package authorization
 
 import (
 	"libra-ry/config"
+	"libra-ry/pkg"
+	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -24,28 +26,30 @@ type LoginRequest struct {
 func Login(c *fiber.Ctx) error {
 	var req LoginRequest
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
+		return pkg.ErrorResponse(c, 401, "Invalid credentials")
 	}
 
 	// Contoh hardcoded user (sebaiknya dari DB)
 	if req.Username != "admin" || req.Password != "admin" {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid credentials"})
+		return pkg.ErrorResponse(c, 401, "Invalid credentials")
 	}
 
 	// Buat token JWT
+	expiry, _ := strconv.Atoi(config.GetEnv("JWT_EXPIRY", "3"))
+	expiredTime := time.Now().Add(time.Duration(expiry) * time.Hour)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username":    req.Username,
 		"role":        "admin",
 		"permissions": []string{"buku_read", "buku_write"},
-		"exp":         time.Now().Add(3 * time.Hour).Unix(), // Expiry 3 jam
+		"exp":         expiredTime.Unix(), // Expiry 3 jam
 	})
 
 	// Sign token dengan secret key dari env
 	secret := config.GetEnv("JWT_SECRET", "default_secret")
 	tokenString, err := token.SignedString([]byte(secret))
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Could not generate token"})
+		return pkg.ErrorResponse(c, 500, "Could not generate token")
 	}
 
-	return c.JSON(fiber.Map{"token": tokenString})
+	return pkg.SuccessResponse(c, "Login successful", fiber.Map{"token": tokenString, "expired_at": expiredTime.Format(time.RFC3339)}, 1)
 }
