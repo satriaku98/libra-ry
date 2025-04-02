@@ -1,8 +1,8 @@
-// internal/config/db.go
 package config
 
 import (
 	"fmt"
+	"libra-ry/database"
 	"libra-ry/internal/domain"
 
 	"go.uber.org/zap"
@@ -29,10 +29,13 @@ func NewDB(log *zap.Logger) *gorm.DB {
 	}
 
 	// AutoMigrate
-	err = db.AutoMigrate(&domain.Buku{})
+	err = db.AutoMigrate(&domain.Buku{}, &domain.User{})
 	if err != nil {
 		log.Fatal("Failed to migrate database", zap.Error(err))
 	}
+
+	// Seeder
+	database.SeedAdmin(db, log, GetEnv("DEFAULT_ADMIN_USER", "admin"), GetEnv("DEFAULT_ADMIN_PASSWORD", "admin"))
 
 	log.Info("Database connected and migrated")
 	return db

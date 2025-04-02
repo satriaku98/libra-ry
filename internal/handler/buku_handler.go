@@ -14,11 +14,6 @@ type BukuHandler struct {
 	useCase usecase.BukuUseCase
 }
 
-// @title Buku API
-// @version 1.0
-// @description API untuk mengelola data buku
-// @host localhost:3000
-// @BasePath /
 func NewBukuHandler(uc usecase.BukuUseCase) *BukuHandler {
 	return &BukuHandler{useCase: uc}
 }

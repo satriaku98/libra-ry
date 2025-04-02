@@ -1,11 +1,5 @@
+basePath: /
 definitions:
-  authorization.LoginRequest:
-    properties:
-      password:
-        type: string
-      username:
-        type: string
-    type: object
   domain.Buku:
     properties:
       id_buku:
@@ -21,8 +15,19 @@ definitions:
       tahun_terbit:
         type: integer
     type: object
+  handler.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:3000
 info:
   contact: {}
+  description: API untuk mengelola data buku
+  title: Buku API
+  version: "1.0"
 paths:
   /auth/login:
     post:
@@ -34,7 +39,7 @@ paths:
         name: credentials
         required: true
         schema:
-          $ref: '#/definitions/authorization.LoginRequest'
+          $ref: '#/definitions/handler.LoginRequest'
       produces:
       - application/json
       responses:

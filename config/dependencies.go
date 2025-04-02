@@ -4,6 +4,7 @@ import (
 	"libra-ry/internal/handler"
 	"libra-ry/internal/repository"
 	"libra-ry/internal/usecase"
+	"strconv"
 
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -11,7 +12,7 @@ import (
 
 type Dependencies struct {
 	BukuHandler *handler.BukuHandler
-	// MemberHandler *handler.MemberHandler
+	AuthHandler *handler.AuthHandler
 }
 
 func InitDependencies(db *gorm.DB, logger *zap.Logger) *Dependencies {
@@ -20,13 +21,15 @@ func InitDependencies(db *gorm.DB, logger *zap.Logger) *Dependencies {
 	bukuUseCase := usecase.NewBukuUseCase(bukuRepo)
 	bukuHandler := handler.NewBukuHandler(bukuUseCase)
 
-	// Initialize Member
-	// memberRepo := repository.NewMemberRepository(db)
-	// memberUseCase := usecase.NewMemberUseCase(memberRepo)
-	// memberHandler := handler.NewMemberHandler(memberUseCase)
+	// Initialize Auth
+	expiry, _ := strconv.Atoi(GetEnv("JWT_EXPIRY", "3"))
+	secret := GetEnv("JWT_SECRET", "default_secret")
+	authRepo := repository.NewUserRepository(db)
+	authUseCase := usecase.NewAuthUseCase(authRepo)
+	authHandler := handler.NewAuthHandler(authUseCase, expiry, secret)
 
 	return &Dependencies{
 		BukuHandler: bukuHandler,
-		// MemberHandler: memberHandler,
+		AuthHandler: authHandler,
 	}
 }

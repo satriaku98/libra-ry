@@ -8,6 +8,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+// @title Buku API
+// @version 1.0
+// @description API untuk mengelola data buku
+// @host localhost:3000
+// @BasePath /
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
@@ -24,6 +29,7 @@ func main() {
 	app.Use(middleware.LoggerMiddleware(logger))
 	app.Use(middleware.RateLimiter())
 	app.Use(middleware.CORSMiddleware())
+	// Swagger Documentation
 	app.Use(config.NewSwaggerConfig())
 
 	// Initialize Dependencies
@@ -31,7 +37,7 @@ func main() {
 
 	// Register Routes
 	routes.BukuRoutes(app, deps.BukuHandler)
-	routes.AuthRoutes(app)
+	routes.AuthRoutes(app, deps.AuthHandler)
 
 	port := config.GetEnv("APP_PORT", "3000")
 	logger.Info("Server is running on port " + port)
