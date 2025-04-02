@@ -1,4 +1,11 @@
 definitions:
+  authorization.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   domain.Buku:
     properties:
       id_buku:
@@ -17,6 +24,29 @@ definitions:
 info:
   contact: {}
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Username and Password
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/authorization.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JWT Token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login and get JWT token
+      tags:
+      - auth
   /buku:
     get:
       parameters:
@@ -49,6 +79,8 @@ paths:
             items:
               $ref: '#/definitions/domain.Buku'
             type: array
+      security:
+      - BearerAuth: []
       summary: Get paginated books
       tags:
       - books
@@ -69,6 +101,8 @@ paths:
           description: Book created
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Create a new book
       tags:
       - books
@@ -87,6 +121,8 @@ paths:
           description: Book deleted
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Delete a book
       tags:
       - books
@@ -104,6 +140,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/domain.Buku'
+      security:
+      - BearerAuth: []
       summary: Get a book by ID
       tags:
       - books
@@ -129,7 +167,14 @@ paths:
           description: Book updated
           schema:
             type: string
+      security:
+      - BearerAuth: []
       summary: Update book details
       tags:
       - books
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

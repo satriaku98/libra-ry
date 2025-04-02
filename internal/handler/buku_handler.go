@@ -32,6 +32,7 @@ func NewBukuHandler(uc usecase.BukuUseCase) *BukuHandler {
 // @Param penulis query string false "Search by author"
 // @Param penerbit query string false "Search by publisher"
 // @Param tahun_terbit query int false "Search by year published"
+// @Security BearerAuth
 // @Success 200 {array} domain.Buku
 // @Router /buku [get]
 func (h *BukuHandler) GetBuku(c *fiber.Ctx) error {
@@ -64,6 +65,7 @@ func (h *BukuHandler) GetBuku(c *fiber.Ctx) error {
 // @Tags books
 // @Produce json
 // @Param id path int true "Book ID"
+// @Security BearerAuth
 // @Success 200 {object} domain.Buku
 // @Router /buku/{id} [get]
 func (h *BukuHandler) GetBukuByID(c *fiber.Ctx) error {
@@ -86,6 +88,7 @@ func (h *BukuHandler) GetBukuByID(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param book body domain.Buku true "Book Data"
+// @Security BearerAuth
 // @Success 201 {string} string "Book created"
 // @Router /buku [post]
 func (h *BukuHandler) CreateBuku(c *fiber.Ctx) error {
@@ -105,6 +108,7 @@ func (h *BukuHandler) CreateBuku(c *fiber.Ctx) error {
 // @Produce json
 // @Param id path int true "Book ID"
 // @Param book body domain.Buku true "Updated Book Data"
+// @Security BearerAuth
 // @Success 200 {string} string "Book updated"
 // @Router /buku/{id} [put]
 func (h *BukuHandler) UpdateBuku(c *fiber.Ctx) error {
@@ -128,6 +132,7 @@ func (h *BukuHandler) UpdateBuku(c *fiber.Ctx) error {
 // @Tags books
 // @Produce json
 // @Param id path int true "Book ID"
+// @Security BearerAuth
 // @Success 200 {string} string "Book deleted"
 // @Router /buku/{id} [delete]
 func (h *BukuHandler) DeleteBuku(c *fiber.Ctx) error {

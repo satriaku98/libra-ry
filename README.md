@@ -1,3 +1,19 @@
+Installation
+
+go mod install
+
+Running the application
+
+go run cmd/main.go
+
+Swagger initialization
+
+swag init -g cmd/main.go
+
+Access Swagger UI
+
+http://localhost:{APP_PORT}/docs
+
 1. ERD (Entity Relationship Diagram)
 Entitas dan Relasi
 Buku (id_buku, judul, penulis, penerbit, tahun_terbit, stok)

@@ -12,7 +12,6 @@ import (
 
 // NewDB menginisialisasi database
 func NewDB(log *zap.Logger) *gorm.DB {
-	LoadEnv()
 	// Ambil konfigurasi dari env
 	dbUser := GetEnv("DB_USER", "default_user")
 	dbPassword := GetEnv("DB_PASSWORD", "default_pass")
