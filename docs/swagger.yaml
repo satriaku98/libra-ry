@@ -1,5 +1,20 @@
 basePath: /
 definitions:
+  domain.AnggotaSwagger:
+    properties:
+      alamat:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      nama:
+        type: string
+      no_hp:
+        type: string
+      user_id:
+        type: integer
+    type: object
   domain.Buku:
     properties:
       id_buku:
@@ -64,6 +79,77 @@ info:
   title: Buku API
   version: "1.0"
 paths:
+  /anggota:
+    delete:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete member profile
+      tags:
+      - anggota
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.AnggotaSwagger'
+      security:
+      - BearerAuth: []
+      summary: Get member detail
+      tags:
+      - anggota
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Anggota data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.AnggotaSwagger'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.AnggotaSwagger'
+      security:
+      - BearerAuth: []
+      summary: Create member profile
+      tags:
+      - anggota
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Anggota data
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.AnggotaSwagger'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.AnggotaSwagger'
+      security:
+      - BearerAuth: []
+      summary: Update member profile
+      tags:
+      - anggota
   /auth/login:
     post:
       consumes:
@@ -263,8 +349,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-      security:
-      - BearerAuth: []
       summary: Create new user
       tags:
       - users

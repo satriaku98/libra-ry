@@ -39,6 +39,7 @@ func main() {
 	routes.BukuRoutes(app, deps.BukuHandler)
 	routes.AuthRoutes(app, deps.AuthHandler)
 	routes.UserRoutes(app, deps.UserHandler)
+	routes.AnggotaRoutes(app, deps.AnggotaHandler)
 
 	port := config.GetEnv("APP_PORT", "3000")
 	logger.Info("Server is running on port " + port)

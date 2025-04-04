@@ -11,9 +11,10 @@ import (
 )
 
 type Dependencies struct {
-	BukuHandler *handler.BukuHandler
-	AuthHandler *handler.AuthHandler
-	UserHandler *handler.UserHandler
+	BukuHandler    *handler.BukuHandler
+	AuthHandler    *handler.AuthHandler
+	UserHandler    *handler.UserHandler
+	AnggotaHandler *handler.AnggotaHandler
 }
 
 func InitDependencies(db *gorm.DB, logger *zap.Logger) *Dependencies {
@@ -34,9 +35,15 @@ func InitDependencies(db *gorm.DB, logger *zap.Logger) *Dependencies {
 	userUseCase := usecase.NewUserUseCase(userRepo)
 	userHandler := handler.NewUserHandler(userUseCase)
 
+	// Initialize Anggota
+	anggotaRepo := repository.NewAnggotaRepository(db)
+	anggotaUseCase := usecase.NewAnggotaUseCase(anggotaRepo)
+	anggotaHandler := handler.NewAnggotaHandler(anggotaUseCase)
+
 	return &Dependencies{
-		BukuHandler: bukuHandler,
-		AuthHandler: authHandler,
-		UserHandler: userHandler,
+		BukuHandler:    bukuHandler,
+		AuthHandler:    authHandler,
+		UserHandler:    userHandler,
+		AnggotaHandler: anggotaHandler,
 	}
 }

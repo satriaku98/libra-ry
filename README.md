@@ -17,7 +17,7 @@ http://localhost:{APP_PORT}/docs
 1. ERD (Entity Relationship Diagram)
 Entitas dan Relasi
 Buku (id_buku, judul, penulis, penerbit, tahun_terbit, stok)
-Anggota (id_anggota, nama, alamat, no_hp)
+Anggota (id_anggota, nama, email, alamat, no_hp)
 Peminjaman (id_peminjaman, id_anggota, tanggal_pinjam, tanggal_kembali, status_peminjaman)
 Detail Peminjaman (id_detail, id_peminjaman, id_buku, jumlah)
 

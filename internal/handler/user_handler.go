@@ -85,7 +85,6 @@ func (h *UserHandler) GetByID(c *fiber.Ctx) error {
 // @Accept json
 // @Produce json
 // @Param user body domain.UserSwagger true "User data"
-// @Security BearerAuth
 // @Success 200 {object} map[string]string
 // @Router /user [post]
 func (h *UserHandler) Create(c *fiber.Ctx) error {

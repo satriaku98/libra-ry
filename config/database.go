@@ -29,7 +29,7 @@ func NewDB(log *zap.Logger) *gorm.DB {
 	}
 
 	// AutoMigrate
-	err = db.AutoMigrate(&domain.Buku{}, &domain.User{})
+	err = db.AutoMigrate(&domain.Buku{}, &domain.User{}, &domain.Anggota{})
 	if err != nil {
 		log.Fatal("Failed to migrate database", zap.Error(err))
 	}

@@ -8,12 +8,12 @@ import (
 )
 
 func UserRoutes(app *fiber.App, handler *handler.UserHandler) {
-	user := app.Group("/user", middleware.JWTMiddleware())
+	user := app.Group("/user")
 
-	user.Get("/", middleware.CheckPermission("user_read"), handler.GetAll)
-	user.Get("/:id", middleware.CheckPermission("user_read"), handler.GetByID)
-	user.Post("/", middleware.CheckPermission("user_write"), handler.Create)
-	user.Put("/change-password", middleware.CheckPermission("user_write"), handler.ChangePassword)
-	user.Put("/:id", middleware.CheckPermission("user_write"), handler.Update)
-	user.Delete("/:id", middleware.CheckPermission("user_write"), handler.Delete)
+	user.Get("/", middleware.JWTMiddleware(), middleware.CheckPermission("user_read"), handler.GetAll)
+	user.Get("/:id", middleware.JWTMiddleware(), middleware.CheckPermission("user_read"), handler.GetByID)
+	user.Post("/", handler.Create) // Create user without authentication
+	user.Put("/change-password", middleware.JWTMiddleware(), middleware.CheckPermission("user_write"), handler.ChangePassword)
+	user.Put("/:id", middleware.JWTMiddleware(), middleware.CheckPermission("user_write"), handler.Update)
+	user.Delete("/:id", middleware.JWTMiddleware(), middleware.CheckPermission("user_write"), handler.Delete)
 }
