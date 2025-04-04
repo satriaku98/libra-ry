@@ -6,10 +6,11 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func GenerateJWT(username string, role string, permissions []string, expiry int, secret string) (string, error) {
+func GenerateJWT(userID int, username string, role string, permissions []string, expiry int, secret string) (string, error) {
 	// Buat token JWT
 	expiredTime := time.Now().Add(time.Duration(expiry) * time.Hour)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id":     userID,
 		"username":    username,
 		"role":        role,
 		"permissions": permissions,

@@ -59,6 +59,9 @@ func (g *DatabaseLogger) Trace(_ context.Context, begin time.Time, fc func() (st
 		zap.Int64("rows", rows),
 		zap.String("elapsed", elapsed),
 	}
+	if err != nil {
+		fields = append(fields, zap.String("sql", sql))
+	}
 	log := g.logger.With(fields...)
 	if log.Sugar().Infof(sql); err != nil {
 		log.Sugar().Errorf(err.Error())

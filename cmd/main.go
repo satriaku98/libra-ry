@@ -38,6 +38,7 @@ func main() {
 	// Register Routes
 	routes.BukuRoutes(app, deps.BukuHandler)
 	routes.AuthRoutes(app, deps.AuthHandler)
+	routes.UserRoutes(app, deps.UserHandler)
 
 	port := config.GetEnv("APP_PORT", "3000")
 	logger.Info("Server is running on port " + port)

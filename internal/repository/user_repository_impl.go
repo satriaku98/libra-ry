@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"encoding/json"
 	"libra-ry/internal/domain"
 
 	"gorm.io/gorm"
@@ -27,7 +28,11 @@ func (r *userRepository) GetAll(username string, role string, permissions []stri
 		query = query.Where("role ILIKE ?", "%"+role+"%")
 	}
 	if len(permissions) > 0 {
-		query = query.Where("permissions @> ?", permissions)
+		permJSON, err := json.Marshal(permissions)
+		if err != nil {
+			return nil, 0, err
+		}
+		query = query.Where("permissions @> ?", permJSON)
 	}
 
 	err := query.Limit(limit).Offset(offset).Find(&users).Error

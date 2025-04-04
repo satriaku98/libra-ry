@@ -54,7 +54,7 @@ func (h *AuthHandler) Login(c *fiber.Ctx) error {
 		return pkg.ErrorResponse(c, 500, "Failed to parse permissions")
 	}
 
-	token, err := pkg.GenerateJWT(user.Username, user.Role, permissions, h.tokenExpiry, h.tokenSecretKey)
+	token, err := pkg.GenerateJWT(int(user.ID), user.Username, user.Role, permissions, h.tokenExpiry, h.tokenSecretKey)
 	if err != nil {
 		return pkg.ErrorResponse(c, 500, "Failed to generate token")
 	}

@@ -20,7 +20,7 @@ func SeedAdmin(db *gorm.DB, log *zap.Logger, defaultAdminUser, defaultAdminPassw
 			log.Fatal("Failed to hash password: " + err.Error())
 		}
 
-		permissions, _ := json.Marshal([]string{"buku_read", "buku_write"})
+		permissions, _ := json.Marshal([]string{"buku_read", "buku_write", "user_read", "user_write"})
 		admin := domain.User{
 			Username:    defaultAdminUser,
 			Password:    string(hashedPassword),
