@@ -1,3 +1,4 @@
 cmd/__debug*
 .vscode/
 .env
+.txt

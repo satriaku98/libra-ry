@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"libra-ry/config"
+	"libra-ry/pkg"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
@@ -12,7 +13,7 @@ func JWTMiddleware() fiber.Handler {
 		// Ambil token dari header Authorization
 		tokenString := c.Get("Authorization")
 		if tokenString == "" {
-			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Missing token"})
+			return pkg.ErrorResponse(c, fiber.StatusUnauthorized, "Missing token")
 		}
 
 		// Hapus "Bearer " jika ada
@@ -28,7 +29,7 @@ func JWTMiddleware() fiber.Handler {
 			return []byte(secret), nil
 		})
 		if err != nil || !token.Valid {
-			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token"})
+			return pkg.ErrorResponse(c, fiber.StatusUnauthorized, "Invalid token")
 		}
 
 		// Simpan token yang sudah di-decode ke context agar bisa digunakan di handler

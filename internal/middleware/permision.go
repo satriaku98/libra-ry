@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"libra-ry/pkg"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -13,19 +14,19 @@ func CheckPermission(requiredPermission string) fiber.Handler {
 		// Ambil token yang sudah didecode di middleware JWT
 		userClaims := c.Locals("user")
 		if userClaims == nil {
-			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Unauthorized"})
+			return pkg.ErrorResponse(c, fiber.StatusUnauthorized, "Unauthorized")
 		}
 
 		// Konversi ke JWT MapClaims
 		claims, ok := userClaims.(jwt.MapClaims)
 		if !ok {
-			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Invalid token claims"})
+			return pkg.ErrorResponse(c, fiber.StatusUnauthorized, "Invalid token claims")
 		}
 
 		// Ambil permissions dari token
 		permissions, ok := claims["permissions"].([]interface{})
 		if !ok {
-			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "No permissions found"})
+			return pkg.ErrorResponse(c, fiber.StatusForbidden, "No permissions found")
 		}
 
 		// Konversi permissions ke slice string
@@ -38,7 +39,7 @@ func CheckPermission(requiredPermission string) fiber.Handler {
 
 		// Cek apakah requiredPermission ada di permissions
 		if !contains(permissionList, requiredPermission) {
-			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "Access denied"})
+			return pkg.ErrorResponse(c, fiber.StatusForbidden, "Access denied")
 		}
 
 		return c.Next()
