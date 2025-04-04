@@ -2,3 +2,4 @@ cmd/__debug*
 .vscode/
 .env
 .txt
+todo.txt
