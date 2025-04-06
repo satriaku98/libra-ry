@@ -15,7 +15,7 @@ definitions:
       user_id:
         type: integer
     type: object
-  domain.Buku:
+  domain.BukuSwagger:
     properties:
       id_buku:
         type: integer
@@ -27,6 +27,10 @@ definitions:
         type: string
       stok:
         type: integer
+      tags:
+        items:
+          type: string
+        type: array
       tahun_terbit:
         type: integer
     type: object
@@ -196,6 +200,14 @@ paths:
         in: query
         name: tahun_terbit
         type: integer
+      - description: Comma-separated list of tags (e.g., drama,adventure)
+        in: query
+        name: tags
+        type: string
+      - description: Comma-separated sort fields (e.g., tahun_terbit,-stok)
+        in: query
+        name: sortBy
+        type: string
       produces:
       - application/json
       responses:
@@ -203,8 +215,18 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/domain.Buku'
+              $ref: '#/definitions/domain.BukuSwagger'
             type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
       security:
       - BearerAuth: []
       summary: Get paginated books
@@ -219,7 +241,7 @@ paths:
         name: book
         required: true
         schema:
-          $ref: '#/definitions/domain.Buku'
+          $ref: '#/definitions/domain.BukuSwagger'
       produces:
       - application/json
       responses:
@@ -265,7 +287,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/domain.Buku'
+            $ref: '#/definitions/domain.BukuSwagger'
       security:
       - BearerAuth: []
       summary: Get a book by ID
@@ -285,7 +307,7 @@ paths:
         name: book
         required: true
         schema:
-          $ref: '#/definitions/domain.Buku'
+          $ref: '#/definitions/domain.BukuSwagger'
       produces:
       - application/json
       responses:

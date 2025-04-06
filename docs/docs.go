@@ -213,6 +213,18 @@ const docTemplate = `{
                         "description": "Search by year published",
                         "name": "tahun_terbit",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma-separated list of tags (e.g., drama,adventure)",
+                        "name": "tags",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Comma-separated sort fields (e.g., tahun_terbit,-stok)",
+                        "name": "sortBy",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -221,8 +233,22 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/domain.Buku"
+                                "$ref": "#/definitions/domain.BukuSwagger"
                             }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     }
                 }
@@ -250,7 +276,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Buku"
+                            "$ref": "#/definitions/domain.BukuSwagger"
                         }
                     }
                 ],
@@ -291,7 +317,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/domain.Buku"
+                            "$ref": "#/definitions/domain.BukuSwagger"
                         }
                     }
                 }
@@ -326,7 +352,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domain.Buku"
+                            "$ref": "#/definitions/domain.BukuSwagger"
                         }
                     }
                 ],
@@ -662,7 +688,7 @@ const docTemplate = `{
                 }
             }
         },
-        "domain.Buku": {
+        "domain.BukuSwagger": {
             "type": "object",
             "properties": {
                 "id_buku": {
@@ -679,6 +705,12 @@ const docTemplate = `{
                 },
                 "stok": {
                     "type": "integer"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "tahun_terbit": {
                     "type": "integer"
